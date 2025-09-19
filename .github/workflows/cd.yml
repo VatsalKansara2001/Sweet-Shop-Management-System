@@ -1,0 +1,142 @@
+
+name: CD - Sweet Shop Deployment
+
+on:
+  workflow_run:
+    workflows: ["CI - Sweet Shop Management System"]
+    branches: [main]
+    types: [completed]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment: staging
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy to staging server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.STAGING_USER }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: |
+          # Update environment variables
+          echo "DATABASE_URL=${{ secrets.STAGING_DATABASE_URL }}" > .env
+          echo "JWT_SECRET_KEY=${{ secrets.STAGING_JWT_SECRET }}" >> .env
+          echo "ENVIRONMENT=staging" >> .env
+          
+          # Pull latest images
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          
+          # Stop existing containers
+          docker-compose -f docker-compose.staging.yml down
+          
+          # Start new containers
+          export BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          export FRONTEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          docker-compose -f docker-compose.staging.yml up -d
+          
+          # Run database migrations
+          docker-compose -f docker-compose.staging.yml exec -T backend alembic upgrade head
+          
+          # Health check
+          sleep 30
+          curl -f https://staging.sweetshop.example.com/health || exit 1
+
+    - name: Run staging tests
+      run: |
+        # Run smoke tests against staging
+        npm ci
+        STAGING_URL=https://staging.sweetshop.example.com npm run test:staging
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    environment: production
+    if: success()
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy to production server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PRODUCTION_HOST }}
+        username: ${{ secrets.PRODUCTION_USER }}
+        key: ${{ secrets.PRODUCTION_SSH_KEY }}
+        script: |
+          # Update environment variables
+          echo "DATABASE_URL=${{ secrets.PRODUCTION_DATABASE_URL }}" > .env
+          echo "JWT_SECRET_KEY=${{ secrets.PRODUCTION_JWT_SECRET }}" >> .env
+          echo "ENVIRONMENT=production" >> .env
+          
+          # Pull latest images
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          
+          # Blue-green deployment
+          # Stop existing containers gradually
+          docker-compose -f docker-compose.production.yml down --timeout 30
+          
+          # Start new containers
+          export BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          export FRONTEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          docker-compose -f docker-compose.production.yml up -d
+          
+          # Run database migrations
+          docker-compose -f docker-compose.production.yml exec -T backend alembic upgrade head
+          
+          # Health check
+          sleep 30
+          curl -f https://sweetshop.example.com/health || exit 1
+
+    - name: Post-deployment verification
+      run: |
+        # Run production smoke tests
+        npm ci
+        PRODUCTION_URL=https://sweetshop.example.com npm run test:production
+
+    - name: Notify deployment
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        text: |
+          Sweet Shop Management System deployed to production! 🍭
+          Version: ${{ github.sha }}
+          Deployed by: ${{ github.actor }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
