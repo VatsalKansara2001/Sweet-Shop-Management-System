@@ -251,7 +251,8 @@ npm run test:coverage
 ### 🛒 Purchase System
 *Real-time inventory management*
 
-![Purchase Flow](https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop)
+![Purchase Flow](Images/Purchase1.png)
+![Purchase Flow](Images/Purchase2.png)
 
 **Features shown:**
 - One-click purchase functionality
@@ -263,7 +264,8 @@ npm run test:coverage
 ### 👑 Admin Dashboard
 *Complete management interface for administrators*
 
-![Admin Dashboard](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop)
+![Admin Dashboard](Images/More1.png)
+![Admin Dashboard](Images/More2.png)
 
 **Features shown:**
 - Create new sweet products
@@ -584,6 +586,7 @@ The integration of AI tools in this project demonstrates that transparent, thoug
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
