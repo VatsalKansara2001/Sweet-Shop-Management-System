@@ -354,7 +354,6 @@ Throughout this project, I leveraged AI tools extensively to accelerate developm
 
 #### 1. GitHub Copilot
 **Usage**: Code generation, auto-completion, and test case creation  
-**Commits**: 31 out of 47 (66%)
 
 **How I used GitHub Copilot:**
 
@@ -390,7 +389,6 @@ def test_user_registration_success(self, client: TestClient):
 
 #### 2. ChatGPT
 **Usage**: Architecture planning, design patterns, and refactoring guidance  
-**Commits**: 16 out of 47 (34%)
 
 **How I used ChatGPT:**
 
@@ -501,20 +499,7 @@ Designed with ChatGPT consultation:
 - Repository pattern implementation
 - Clean code organization principles
 
-Co-authored-by: GitHub Copilot <copilot@github.com>
-Co-authored-by: ChatGPT <chatgpt@openai.com>
 ```
-
-
-**Statistics:**
-- **66% AI-assisted commits** (31 out of 47)
-- **87.3% test coverage** achieved with AI-generated tests
-- **40-50% faster development** estimated time savings
-- **Zero production bugs** with AI-assisted code review
-- **100% transparency** in AI usage documentation
-
-The integration of AI tools in this project demonstrates that transparent, thoughtful AI usage can significantly enhance software development productivity and quality while maintaining professional standards and learning objectives.
-
 ---
 
 
@@ -586,6 +571,7 @@ The integration of AI tools in this project demonstrates that transparent, thoug
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
