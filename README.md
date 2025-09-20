@@ -157,6 +157,8 @@ The **Sweet Shop Management System** is a full-stack web application that demons
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000/docs
 
+![Workflow](tdd_workflow.png)
+
 ---
 
 ## 🧪 Running Tests
@@ -204,6 +206,8 @@ npm run test:coverage
 - **Failed**: 0 ✅
 - **Skipped**: 2
 - **Coverage**: 87.3% (Target: 85%) ✅
+
+![Test Pyramid](testing_pyramid.png)
 
 ---
 
@@ -572,6 +576,7 @@ Designed with ChatGPT consultation:
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
