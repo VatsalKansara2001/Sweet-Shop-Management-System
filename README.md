@@ -46,6 +46,7 @@ The **Sweet Shop Management System** is a full-stack web application that demons
 - **Docker Compose** - Local development environment
 - **OpenAPI/Swagger** - API documentation
 
+![Red Green Chart](chart.png)
 ---
 
 ## 🚀 Quick Start
@@ -571,6 +572,7 @@ Designed with ChatGPT consultation:
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
