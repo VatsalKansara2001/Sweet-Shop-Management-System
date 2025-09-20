@@ -222,7 +222,7 @@ npm run test:coverage
 ### 🔐 Authentication System
 *Secure login and registration forms*
 
-![Login Form](https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600&h=400&fit=crop)
+![Login Form](Images/Authentication.png)
 
 **Features shown:**
 - JWT-based authentication
@@ -583,6 +583,7 @@ The integration of AI tools in this project demonstrates that transparent, thoug
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
