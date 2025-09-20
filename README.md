@@ -237,7 +237,8 @@ npm run test:coverage
 ### 🍰 Sweet Catalog
 *Browse and search sweet products*
 
-![Sweet Catalog](https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=500&fit=crop)
+![Sweet Catalog](Images/Catalog_1.png)
+![Sweet Catalog](Images/Catalog_2.png)
 
 **Features shown:**
 - Grid layout of sweet cards
@@ -583,6 +584,7 @@ The integration of AI tools in this project demonstrates that transparent, thoug
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
 
 
 
