@@ -211,7 +211,7 @@ npm run test:coverage
 ### 🏠 Homepage
 *Welcome page with feature overview and navigation*
 
-![Homepage](https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=400&fit=crop)
+![Homepage](Images/Screenshot 2025-09-20 085214.png?w=800&h=400&fit=crop)
 
 **Features shown:**
 - Clean, modern design with brand colors
@@ -583,3 +583,4 @@ The integration of AI tools in this project demonstrates that transparent, thoug
 | GET | `/api/inventory/purchases/my` | My purchase history | User |
 
 ---
+
